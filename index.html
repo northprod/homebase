@@ -403,18 +403,35 @@
     line-height:1.3;
   }
   .img-ph svg{opacity:.6;flex-shrink:0;}
+  .img-ph img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .brand-logo img,.hero-logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+  }
 
   .brand-logo{
-<div class="brand-logo">
-  <img src="images/logo.png" alt="Logo">
-</div>
+    width:46px;height:46px;
+    border-radius:10px;
+    font-size:8px;
+    gap:2px;
   }
   .brand-logo svg{width:16px;height:16px;}
 
   .hero-logo{
-<div class="hero-logo">
-  <img src="images/logo.png" alt="Logo">
-</div>
+    width:110px;height:110px;
+    border-radius:22px;
+    font-size:11px;
+    gap:6px;
+    margin:0 auto;
+  }
+  .hero-logo svg{width:30px;height:30px;}
   .banner-ph{
     aspect-ratio:960/540;
     width:100%;
@@ -460,6 +477,35 @@
   }
   .project-card h3{font-size:20px;margin:6px 20px 8px;}
   .project-card p{margin:0 20px 22px;color:#d6e6f7;font-size:14px;line-height:1.6;}
+
+/* Tailles fixes des images */
+.brand-logo{
+  width: 52px;
+  height: 52px;
+}
+.hero-logo{
+  width: 180px;
+  height: 180px;
+}
+.banner-ph{
+  width: 100%;
+  height: 220px;
+}
+.project-ph{
+  width: 100%;
+  height: 240px;
+}
+.img-ph img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.brand-logo img,
+.hero-logo img{
+  object-fit: contain;
+}
+
 </style>
 </head>
 <body>
@@ -470,8 +516,7 @@
 <header>
   <div class="brand">
     <div class="img-ph brand-logo" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Logo</span>
+      <img src="UPLOAD_LOGO_HEADER.png" alt="Logo North">
     </div>
   </div>
   <nav aria-label="Navigation principale">
@@ -489,8 +534,7 @@
   <section id="accueil" class="hero">
     <div class="hero-mark">
       <div class="img-ph hero-logo" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Logo</span>
+        <img src="UPLOAD_LOGO_HERO.png" alt="Logo North">
       </div>
     </div>
     <h1 class="hero-title">NORTH</h1>
@@ -565,9 +609,8 @@
 
     <a class="banner-link" href="#reseaux-contact" aria-label="Découvrir North Reforged — rejoindre la communauté">
       <div class="img-ph banner-ph" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-<img src="north-reforged.png" alt="North Reforged" class="banner-image">
-</div>
+        <img src="UPLOAD_BANNER_NORTH_REFORGED.png" alt="North Reforged">
+      </div>
 <div class="banner-overlay">
         <span class="banner-cta">Voir North Reforged →</span>
       </div>
@@ -593,8 +636,7 @@
     <div class="projects-grid">
       <article class="project-card">
         <div class="img-ph project-ph" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Image du projet</span>
+          <img src="UPLOAD_PROJECT_ORION.png" alt="North Orion Reloaded">
         </div>
         <p class="project-tag">A Venir</p>
         <h3>North Orion Reloaded</h3>
@@ -606,8 +648,7 @@ Votre objectif ? Protéger la ville d’une vague de zombies et de monolithes, t
       </article>
       <article class="project-card">
         <div class="img-ph project-ph" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Image du projet</span>
+          <img src="UPLOAD_PROJECT_ELITE.png" alt="North Project Elite">
         </div>
         <p class="project-tag">Fortnite</p>
         <h3>North Project Elite </h3>
@@ -619,8 +660,7 @@ des loadouts personnalisables ainsi qu’un système de classement par rangs.
       </article>
       <article class="project-card">
         <div class="img-ph project-ph" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Image du projet</span>
+          <img src="UPLOAD_PROJECT_ELITE_TRAINING.png" alt="North Project Elite Training">
         </div>
         <p class="project-tag">A Venir</p>
         <h3>North Project Elite Training</h3>
@@ -631,8 +671,7 @@ des loadouts personnalisables.</p>
       </article>
       <article class="project-card">
         <div class="img-ph project-ph" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Image du projet</span>
+          <img src="UPLOAD_PROJECT_04.png" alt="Projet 04">
         </div>
         <p class="project-tag">A Venir</p>
         <h3>???</h3>
@@ -640,8 +679,7 @@ des loadouts personnalisables.</p>
       </article>
       <article class="project-card">
         <div class="img-ph project-ph" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Image du projet</span>
+          <img src="UPLOAD_PROJECT_ROBLOX_01.png" alt="Projet Roblox 01">
         </div>
         <p class="project-tag">Roblox</p>
         <h3>???</h3>

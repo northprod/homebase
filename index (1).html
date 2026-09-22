@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>North Reforged</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#3fe0d8;
+    --blue-mid:#1d6fe0;
+    --blue-deep:#0a2d8f;
+    --ink:#050b1a;
+    --purple:#8b2fe0;
+    --purple-light:#c99cff;
+    --cyan-glow:#5df2ff;
+    --white:#fdfeff;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit;}
+  html{scroll-behavior:smooth;scroll-padding-top:130px;height:100%;}
+  body{
+    margin:0;
+    min-height:100%;
+    font-family:'Inter',sans-serif;
+    color:var(--white);
+    background:var(--ink);
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion:no-preference){
+    body{scroll-behavior:smooth;}
+  }
+  h1,h2,h3,.display{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    letter-spacing:.01em;
+    margin:0;
+  }
+
+  /* ---------- animated background ---------- */
+  .bg-wrap{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background:linear-gradient(125deg,var(--teal) 0%,var(--blue-mid) 46%,var(--blue-deep) 78%,var(--ink) 100%);
+    background-size:180% 180%;
+    animation:drift 22s ease-in-out infinite;
+  }
+  @keyframes drift{
+    0%{background-position:0% 30%;}
+    50%{background-position:100% 70%;}
+    100%{background-position:0% 30%;}
+  }
+  .stars{position:fixed;inset:0;z-index:-1;pointer-events:none;}
+  .stars span{
+    position:absolute;
+    width:3px;height:3px;
+    background:#fff;
+    border-radius:50%;
+    opacity:.55;
+    animation:twinkle 5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.15;transform:scale(1);}
+    50%{opacity:.85;transform:scale(1.6);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .bg-wrap{animation:none;}
+    .stars span{animation:none;opacity:.4;}
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    gap:clamp(20px,4vw,56px);
+    background:rgba(253,254,255,.97);
+    backdrop-filter:blur(6px);
+    padding:14px clamp(18px,4vw,40px);
+    border-radius:0 0 34px 0;
+    box-shadow:0 8px 24px rgba(5,11,26,.18);
+  }
+  .brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .brand svg{width:46px;height:46px;filter:drop-shadow(0 0 6px rgba(61,224,216,.6));}
+  nav{display:flex;flex-wrap:wrap;gap:clamp(14px,3vw,34px);}
+  nav a{
+    color:var(--ink);
+    text-decoration:none;
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:clamp(15px,1.6vw,19px);
+    position:relative;
+    padding-bottom:4px;
+  }
+  nav a::after{
+    content:'';
+    position:absolute;
+    left:0;bottom:0;
+    width:0;height:2px;
+    background:linear-gradient(90deg,var(--purple),var(--cyan-glow));
+    transition:width .25s ease;
+  }
+  nav a:hover::after,nav a:focus-visible::after{width:100%;}
+  nav a:focus-visible{outline:2px solid var(--purple);outline-offset:3px;border-radius:2px;}
+
+  /* ---------- sections ---------- */
+  section{
+    position:relative;
+    padding:clamp(70px,10vw,120px) clamp(20px,7vw,90px);
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    color:var(--purple-light);
+    margin-bottom:10px;
+  }
+  .down-arrow{
+    display:flex;justify-content:center;margin-top:60px;
+    animation:bob 2.2s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(10px);}}
+  @media (prefers-reduced-motion:reduce){.down-arrow{animation:none;}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:calc(100vh - 90px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:26px;
+    padding-top:clamp(40px,8vw,80px);
+  }
+  .hero-mark{opacity:0;transform:translateY(24px);animation:rise .9s ease forwards;}
+  .hero .hero-title{opacity:0;transform:translateY(24px);animation:rise .9s ease .15s forwards;}
+  .hero .hero-sub{opacity:0;transform:translateY(24px);animation:rise .9s ease .3s forwards;}
+  .hero .hero-cta{opacity:0;transform:translateY(24px);animation:rise .9s ease .45s forwards;}
+  @keyframes rise{to{opacity:1;transform:translateY(0);}}
+  @media (prefers-reduced-motion:reduce){
+    .hero-mark,.hero-title,.hero-sub,.hero-cta{animation:none;opacity:1;transform:none;}
+  }
+  .hero-title{
+    font-size:clamp(64px,14vw,150px);
+    line-height:.9;
+    background:linear-gradient(180deg,#ffffff 0%,#dff8ff 60%,var(--cyan-glow) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 60px rgba(93,242,255,.35);
+  }
+  .hero-sub{
+    max-width:680px;
+    font-size:clamp(16px,2vw,19px);
+    line-height:1.6;
+    color:#eaf6ff;
+  }
+  .hero-sub strong{color:var(--cyan-glow);font-weight:600;}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+
+  .btn{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:17px;
+    padding:14px 30px;
+    border-radius:12px;
+    text-decoration:none;
+    display:inline-block;
+    transition:transform .2s ease,box-shadow .2s ease;
+    border:1.5px solid transparent;
+  }
+  .btn-primary{
+    background:linear-gradient(90deg,var(--purple),var(--cyan-glow));
+    color:var(--ink);
+    box-shadow:0 8px 26px rgba(139,47,224,.4);
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(93,242,255,.45);}
+  .btn-ghost{
+    color:#fff;
+    border-color:rgba(255,255,255,.5);
+  }
+  .btn-ghost:hover{border-color:var(--cyan-glow);color:var(--cyan-glow);transform:translateY(-3px);}
+  .btn:focus-visible{outline:2px solid var(--cyan-glow);outline-offset:3px;}
+
+  /* ---------- section headings ---------- */
+  .sec-head{text-align:center;max-width:700px;margin:0 auto 56px;}
+  .sec-head h2{font-size:clamp(38px,6vw,58px);}
+  .sec-head p{margin-top:14px;color:#dcecff;font-size:16px;line-height:1.7;}
+
+  /* platform cards */
+  .platforms{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  @media (max-width:760px){.platforms{grid-template-columns:1fr;}}
+  .platform-card{
+    background:rgba(253,254,255,.06);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:18px;
+    padding:28px 24px;
+    text-align:left;
+    transition:transform .25s ease,border-color .25s ease,background .25s ease;
+  }
+  .platform-card:hover{
+    transform:translateY(-6px);
+    border-color:var(--cyan-glow);
+    background:rgba(253,254,255,.1);
+  }
+  .platform-card .pf-icon{
+    width:44px;height:44px;margin-bottom:16px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--purple),var(--cyan-glow));
+  }
+  .platform-card h3{font-size:22px;margin-bottom:8px;}
+  .platform-card p{margin:0;color:#d6e6f7;font-size:14.5px;line-height:1.6;}
+
+  .stats-row{
+    display:flex;
+    justify-content:center;
+    gap:clamp(24px,6vw,72px);
+    margin-top:56px;
+    flex-wrap:wrap;
+    text-align:center;
+  }
+  .stat b{
+    display:block;
+    font-family:'Rajdhani',sans-serif;
+    font-size:clamp(34px,5vw,46px);
+    font-weight:700;
+    background:linear-gradient(90deg,var(--purple-light),var(--cyan-glow));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .stat span{font-size:13px;color:#cfe3f5;letter-spacing:.03em;}
+
+  /* ---------- North Reforged ---------- */
+  .nr-lockup{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:14px;}
+  .nr-tag{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    color:#d9c6ff;
+    background:rgba(139,47,224,.25);
+    border:1px solid rgba(201,156,255,.5);
+    padding:6px 16px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .nr-word{
+    font-size:clamp(40px,7vw,70px);
+    line-height:1;
+    text-align:center;
+  }
+  .nr-word .n1{color:#fff;}
+  .nr-word .n2{
+    display:block;
+    font-size:clamp(48px,9vw,88px);
+    font-style:italic;
+    background:linear-gradient(90deg,var(--purple) 0%,var(--purple-light) 45%,var(--cyan-glow) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 22px rgba(139,47,224,.5));
+  }
+  .nr-desc{max-width:640px;margin:22px auto 0;text-align:center;color:#e4f0ff;line-height:1.7;font-size:16px;}
+
+  .banner-link{
+    display:block;
+    position:relative;
+    max-width:760px;
+    margin:48px auto 0;
+    border-radius:20px;
+    overflow:hidden;
+    text-decoration:none;
+    box-shadow:0 20px 50px rgba(5,11,26,.5);
+    border:1px solid rgba(255,255,255,.15);
+  }
+  .banner-link svg{display:block;width:100%;height:auto;}
+  .banner-overlay{
+    position:absolute;inset:0;
+    display:flex;align-items:flex-end;justify-content:center;
+    padding-bottom:28px;
+    background:linear-gradient(180deg,rgba(5,11,26,0) 45%,rgba(5,11,26,.75) 100%);
+    opacity:0;transition:opacity .3s ease;
+  }
+  .banner-link:hover .banner-overlay,.banner-link:focus-visible .banner-overlay{opacity:1;}
+  .banner-cta{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:clamp(20px,4vw,30px);
+    color:#fff;
+    letter-spacing:.02em;
+    transform:translateY(8px);
+    transition:transform .3s ease;
+  }
+  .banner-link:hover .banner-cta{transform:translateY(0);}
+  .banner-link:focus-visible{outline:3px solid var(--cyan-glow);outline-offset:4px;}
+  .banner-caption{
+    text-align:center;
+    margin-top:18px;
+    font-family:'Rajdhani',sans-serif;
+    font-weight:700;
+    font-size:clamp(22px,3.2vw,32px);
+    color:#fff;
+  }
+
+  .features{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    max-width:700px;
+    margin:44px auto 0;
+  }
+  @media (max-width:620px){.features{grid-template-columns:1fr;}}
+  .feature{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:rgba(253,254,255,.05);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    padding:16px 18px;
+  }
+  .feature .dot{
+    flex-shrink:0;
+    width:10px;height:10px;
+    margin-top:6px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--purple),var(--cyan-glow));
+    box-shadow:0 0 10px rgba(93,242,255,.7);
+  }
+  .feature p{margin:0;color:#e6f1ff;font-size:14.5px;line-height:1.55;}
+
+  /* ---------- reseaux / contact ---------- */
+  .social-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:18px;
+  }
+  .social-card{
+    background:rgba(253,254,255,.06);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:16px;
+    padding:24px 20px;
+    text-align:center;
+    text-decoration:none;
+    color:#fff;
+    transition:transform .25s ease,border-color .25s ease,background .25s ease;
+  }
+  .social-card:hover,.social-card:focus-visible{
+    transform:translateY(-5px);
+    border-color:var(--cyan-glow);
+    background:rgba(253,254,255,.11);
+  }
+  .social-card svg{width:30px;height:30px;margin-bottom:10px;}
+  .social-card span{display:block;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:16px;}
+
+  .contact-box{
+    margin-top:54px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    background:rgba(253,254,255,.06);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:20px;
+    padding:30px clamp(20px,4vw,40px);
+  }
+  .contact-box h3{font-size:22px;margin-bottom:6px;}
+  .contact-box p{margin:0;color:#dbe9fa;font-size:14.5px;}
+  .contact-box a.btn-primary{white-space:nowrap;}
+
+  footer{
+    text-align:center;
+    padding:34px 20px calc(34px + env(safe-area-inset-bottom,0px));
+    color:#b9cde3;
+    font-size:13px;
+  }
+
+  /* ---------- image placeholders ---------- */
+  .img-ph{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:repeating-linear-gradient(45deg, rgba(253,254,255,.05) 0 10px, rgba(253,254,255,.09) 10px 20px);
+    border:1.5px dashed rgba(255,255,255,.35);
+    color:rgba(255,255,255,.6);
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    text-align:center;
+    line-height:1.3;
+  }
+  .img-ph svg{opacity:.6;flex-shrink:0;}
+
+  .brand-logo{
+    width:46px;height:46px;
+    border-radius:10px;
+    font-size:8px;
+    gap:2px;
+  }
+  .brand-logo svg{width:16px;height:16px;}
+
+  .hero-logo{
+    width:110px;height:110px;
+    border-radius:22px;
+    font-size:11px;
+    gap:6px;
+    margin:0 auto;
+  }
+  .hero-logo svg{width:30px;height:30px;}
+
+  .banner-ph{
+    aspect-ratio:960/540;
+    width:100%;
+    border-radius:20px;
+    font-size:16px;
+    gap:10px;
+  }
+  .banner-ph svg{width:42px;height:42px;}
+
+  /* ---------- projets ---------- */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:22px;
+  }
+  .project-card{
+    background:rgba(253,254,255,.06);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:18px;
+    overflow:hidden;
+    transition:transform .25s ease,border-color .25s ease,background .25s ease;
+  }
+  .project-card:hover{
+    transform:translateY(-6px);
+    border-color:var(--cyan-glow);
+    background:rgba(253,254,255,.1);
+  }
+  .project-ph{
+    aspect-ratio:4/3;
+    border-radius:0;
+    border-width:0 0 1.5px 0;
+    font-size:13px;
+  }
+  .project-ph svg{width:26px;height:26px;}
+  .project-tag{
+    display:inline-block;
+    margin:18px 20px 0;
+    font-family:'Rajdhani',sans-serif;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:.03em;
+    color:var(--purple-light);
+  }
+  .project-card h3{font-size:20px;margin:6px 20px 8px;}
+  .project-card p{margin:0 20px 22px;color:#d6e6f7;font-size:14px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="bg-wrap"></div>
+<div class="stars" id="stars" aria-hidden="true"></div>
+
+<header>
+  <div class="brand">
+    <div class="img-ph brand-logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Logo</span>
+    </div>
+  </div>
+  <nav aria-label="Navigation principale">
+    <a href="#accueil">Accueil</a>
+    <a href="#cest-quoi-north">C'est quoi North&nbsp;?</a>
+    <a href="#north-reforged">North Reforged</a>
+    <a href="#projets">Projets</a>
+    <a href="#reseaux-contact">Réseaux et contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ACCUEIL -->
+  <section id="accueil" class="hero">
+    <div class="hero-mark">
+      <div class="img-ph hero-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Logo</span>
+      </div>
+    </div>
+    <h1 class="hero-title">NORTH</h1>
+    <p class="hero-sub">
+      Le retour de l'ancien North. La map originale est mise de côté le temps que North&nbsp;Reforged
+      arrive sur l'UEFN — <strong>de retour après 4&nbsp;ans</strong>, avec un tout nouveau système de jeu
+      et une histoire inédite.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#north-reforged">Découvrir North Reforged</a>
+      <a class="btn btn-ghost" href="#reseaux-contact">Rejoindre la communauté</a>
+    </div>
+    <div class="down-arrow" aria-hidden="true">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <!-- C'EST QUOI NORTH -->
+  <section id="cest-quoi-north">
+    <div class="sec-head">
+      <p class="eyebrow">La structure</p>
+      <h2>C'est quoi North&nbsp;?</h2>
+      <p>
+        North est une structure de développement de maps et de jeux fondée en 2020, active sur
+        trois univers : Fortnite, Roblox et Minecraft. Une petite équipe passionnée, un objectif
+        simple — construire des expériences que la communauté a vraiment envie de jouer.
+      </p>
+    </div>
+
+    <div class="platforms">
+      <div class="platform-card">
+        <div class="pf-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20L20 4M4 4l16 16" stroke="#050b1a" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Fortnite</h3>
+        <p>Notre terrain d'origine. Maps créatives et expériences UEFN, dont North Reforged, notre prochain gros projet.</p>
+      </div>
+      <div class="platform-card">
+        <div class="pf-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="5" y="5" width="14" height="14" rx="3" stroke="#050b1a" stroke-width="2.2"/></svg>
+        </div>
+        <h3>Roblox</h3>
+        <p>Des expériences pensées pour une communauté plus jeune, avec le même soin apporté au gameplay et à la direction artistique.</p>
+      </div>
+      <div class="platform-card">
+        <div class="pf-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 4l7 4v8l-7 4-7-4V8l7-4z" stroke="#050b1a" stroke-width="2.2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Minecraft</h3>
+        <p>Bâtir, explorer, jouer : des mondes et des mini-jeux Minecraft conçus par la même équipe créative.</p>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><b>2020</b><span>Année de création</span></div>
+      <div class="stat"><b>3</b><span>Univers de jeu</span></div>
+      <div class="stat"><b>4 ans</b><span>De retour après une pause</span></div>
+    </div>
+  </section>
+
+  <!-- NORTH REFORGED -->
+  <section id="north-reforged">
+    <div class="nr-lockup">
+      <span class="nr-tag">Résurgence de l'ancien North</span>
+      <h2 class="nr-word"><span class="n1">NORTH</span><span class="n2">Reforged</span></h2>
+    </div>
+    <p class="nr-desc">
+      La map originale est mise de côté le temps que l'expérience UEFN se prépare. North Reforged
+      revient après 4 ans d'absence avec un système de jeu entièrement repensé et une nouvelle
+      histoire à découvrir.
+    </p>
+
+    <a class="banner-link" href="#reseaux-contact" aria-label="Découvrir North Reforged — rejoindre la communauté">
+      <div class="img-ph banner-ph" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Visuel North Reforged</span>
+      </div>
+      <div class="banner-overlay">
+        <span class="banner-cta">Voir North Reforged →</span>
+      </div>
+    </a>
+    <p class="banner-caption">De retour après 4 ans</p>
+
+    <div class="features">
+      <div class="feature"><span class="dot"></span><p>Nouveau système de jeu pensé de zéro</p></div>
+      <div class="feature"><span class="dot"></span><p>Une toute nouvelle histoire à vivre</p></div>
+      <div class="feature"><span class="dot"></span><p>Arrivée prochaine sur UEFN</p></div>
+      <div class="feature"><span class="dot"></span><p>L'ancienne map North mise de côté</p></div>
+    </div>
+  </section>
+
+  <!-- PROJETS -->
+  <section id="projets">
+    <div class="sec-head">
+      <p class="eyebrow">Nos créations</p>
+      <h2>Projets</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Un aperçu des expériences en développement chez North, tous univers confondus.</p>
+    </div>
+
+    <div class="projects-grid">
+      <article class="project-card">
+        <div class="img-ph project-ph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Image du projet</span>
+        </div>
+        <p class="project-tag">Fortnite</p>
+        <h3>Projet 01</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      </article>
+      <article class="project-card">
+        <div class="img-ph project-ph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Image du projet</span>
+        </div>
+        <p class="project-tag">Roblox</p>
+        <h3>Projet 02</h3>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </article>
+      <article class="project-card">
+        <div class="img-ph project-ph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Image du projet</span>
+        </div>
+        <p class="project-tag">Minecraft</p>
+        <h3>Projet 03</h3>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      </article>
+      <article class="project-card">
+        <div class="img-ph project-ph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Image du projet</span>
+        </div>
+        <p class="project-tag">Fortnite</p>
+        <h3>Projet 04</h3>
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </article>
+      <article class="project-card">
+        <div class="img-ph project-ph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M21 16l-5.5-5.5a2 2 0 0 0-2.8 0L3 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Image du projet</span>
+        </div>
+        <p class="project-tag">Roblox</p>
+        <h3>Projet 05</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- RESEAUX ET CONTACT -->
+  <section id="reseaux-contact">
+    <div class="sec-head">
+      <p class="eyebrow">Restons connectés</p>
+      <h2>Réseaux et contact</h2>
+      <p>Suis l'avancée de North Reforged et échange avec l'équipe et la communauté.</p>
+    </div>
+
+    <div class="social-grid">
+      <a class="social-card" href="#" aria-label="Discord">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8 15c2.5 1.4 5.5 1.4 8 0M9 10.5c0 .8-.6 1.5-1.3 1.5S6.3 11.3 6.3 10.5 7 9 7.7 9s1.3.7 1.3 1.5Zm8 0c0 .8-.6 1.5-1.3 1.5S15.3 11.3 15.3 10.5 16 9 16.7 9s1.3.7 1.3 1.5Z" stroke="#5df2ff" stroke-width="1.7" stroke-linecap="round"/><path d="M7 6.5C9.4 5.4 14.6 5.4 17 6.5c1.6 2.4 2.2 6 2 9.5-1.5 1.4-3 2-3 2l-.7-1.4M7 6.5C4.6 8.9 4 12.5 4.2 16c1.5 1.4 3 2 3 2l.7-1.4" stroke="#5df2ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Discord</span>
+      </a>
+      <a class="social-card" href="#" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 4v10.2a3.3 3.3 0 1 1-2.6-3.2" stroke="#5df2ff" stroke-width="1.7" stroke-linecap="round"/><path d="M14 4c.4 2 2 3.4 4 3.6" stroke="#5df2ff" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span>TikTok</span>
+      </a>
+      <a class="social-card" href="#" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6.5" width="17" height="11" rx="3" stroke="#5df2ff" stroke-width="1.7"/><path d="M10.5 9.5l4 2.5-4 2.5z" fill="#5df2ff"/></svg>
+        <span>YouTube</span>
+      </a>
+      <a class="social-card" href="#" aria-label="X / Twitter">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="#5df2ff" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span>X (Twitter)</span>
+      </a>
+    </div>
+
+    <div class="contact-box">
+      <div>
+        <h3>Une question, une proposition&nbsp;?</h3>
+        <p>Écris à l'équipe North, on répond sur Discord et par mail.</p>
+      </div>
+      <a class="btn btn-primary" href="mailto:contact@north-game.com">Contacter l'équipe</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 North — Structure de développement Fortnite · Roblox · Minecraft
+</footer>
+
+<script>
+  // scattered background stars, generated once
+  (function(){
+    var box = document.getElementById('stars');
+    var count = window.innerWidth < 600 ? 24 : 48;
+    for (var i = 0; i < count; i++){
+      var s = document.createElement('span');
+      s.style.top = Math.random()*100 + '%';
+      s.style.left = Math.random()*100 + '%';
+      s.style.animationDelay = (Math.random()*5) + 's';
+      s.style.animationDuration = (4 + Math.random()*4) + 's';
+      box.appendChild(s);
+    }
+  })();
+</script>
+</body>
+</html>
